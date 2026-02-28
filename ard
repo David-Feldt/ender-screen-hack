@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Compact arduino-cli wrapper
+
+SKETCH="task_timer"
+FQBN="arduino:avr:uno"
+
+PORT=$(arduino-cli board list 2>/dev/null | awk '/arduino:avr:uno/{print $1}' | head -1)
+# Fallback: first tty/cu.usb port
+[ -z "$PORT" ] && PORT=$(arduino-cli board list 2>/dev/null | awk '/tty\.usb|cu\.usb/{print $1}' | head -1)
+
+usage() {
+  echo "Usage: ard <command>"
+  echo "  upload   compile + upload to board"
+  echo "  verify   compile only"
+  echo "  monitor  open serial monitor"
+  echo "  boards   list connected boards"
+  echo "  port     show detected port"
+}
+
+case "${1:-}" in
+  upload)
+    echo "Uploading $SKETCH → $PORT ($FQBN)"
+    arduino-cli compile --fqbn "$FQBN" "$SKETCH" && \
+    arduino-cli upload  --fqbn "$FQBN" --port "$PORT" "$SKETCH"
+    ;;
+  verify)
+    echo "Verifying $SKETCH ($FQBN)"
+    arduino-cli compile --fqbn "$FQBN" "$SKETCH"
+    ;;
+  monitor)
+    echo "Monitoring $PORT (Ctrl+C to exit)"
+    arduino-cli monitor --port "$PORT" --config baudrate=9600
+    ;;
+  boards)
+    arduino-cli board list
+    ;;
+  port)
+    echo "${PORT:-not detected}"
+    ;;
+  *)
+    usage
+    ;;
+esac

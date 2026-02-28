@@ -7,9 +7,10 @@ A standalone task timer using the Creality Ender 3 display (ENH12864Z-1) wired t
 
 ## Photos
 
-| Front | Back |
-|-------|------|
-| ![Ender 3 display front](ender-front.jpg) | ![Ender 3 display back](ender-back.jpg) |
+<p>
+  <img src="ender-front.jpg" alt="Ender 3 display front" width="360">
+  <img src="ender-back.jpg" alt="Ender 3 display back" width="360">
+</p>
 
 ---
 
